@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: incident-engine
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    streams:
+      properties:
+        auto.offset.reset: earliest
+  config:
+    import: optional:file:.env[.properties]
+
+
+server:
+  port: 8082
+
+kafka:
+  topic:
+    1m: ${KAFKA_TOPIC_1M}
+    5m: ${KAFKA_TOPIC_5M}
+    dlq: ${KAFKA_TOPIC_DLQ}
+  group:
+    raw: ${KAFKA_GROUP_RAW}
+    dlq: ${KAFKA_GROUP_DLQ}
+
+logging:
+  level:
+    org.apache.kafka: OFF
+
+schedulers:
+  incidentChecker:
+    cron: ${INCIDENT_CRON}
