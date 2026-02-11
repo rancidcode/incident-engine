@@ -1,11 +1,13 @@
 package org.rancidcode.incidentengine.domain;
 
+import lombok.extern.slf4j.Slf4j;
 import org.rancidcode.incidentengine.infra.db.TelemetryTable;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class DataTask {
 
     public void insertData(JdbcTemplate jdbcTemplate, Map<String, Object> map) {

@@ -63,6 +63,7 @@ public class KafkaConsumer {
             values.put(TelemetryTable.COL_HUMIDITY, telemetry.getHumidity());
             values.put(TelemetryTable.COL_TIMESTAMP, Timestamp.from(telemetry.getTimestamp()));
 
+            log.info(MAPPER.writeValueAsString(values));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
