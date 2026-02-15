@@ -2,7 +2,7 @@ package org.rancidcode.incidentengine.adapter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.rancidcode.incidentengine.domain.DataTask;
-import org.rancidcode.incidentengine.entity.Telemetry;
+import org.rancidcode.incidentengine.dto.Telemetry;
 import org.rancidcode.incidentengine.infra.db.TelemetryTable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 import javax.sql.DataSource;
@@ -18,13 +17,15 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.rancidcode.incidentengine.infra.db.DataSchema.MAPPER;
+
 @Service
 @Slf4j
 public class KafkaConsumer {
 
     private final JdbcTemplate jdbcTemplate;
     private final DataTask dataTask = new DataTask();
-    private final ObjectMapper MAPPER = new ObjectMapper();
+
 
     public KafkaConsumer(@Qualifier("telemetryDataSource") DataSource telemetryDataSource) {
         this.jdbcTemplate = new JdbcTemplate(telemetryDataSource);
@@ -32,6 +33,7 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = "${kafka.topic.1m}", groupId = "${kafka.group.avg}")
     public void processAvg(String message, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("Topic : {}, message : {}", topic, message);
         log.info("Topic : {}, message : {}", topic, message);
     }
 
@@ -44,7 +46,7 @@ public class KafkaConsumer {
     public void processRaw(String message, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         log.info("Topic : {}, message : {}", topic, message);
 
-        dataTask.insertData(jdbcTemplate, extractTelemetry(message));
+        dataTask.insertData(jdbcTemplate, TelemetryTable.TABLE, extractTelemetry(message));
     }
 
     private Map<String, Object> extractTelemetry(String rawMessage) {

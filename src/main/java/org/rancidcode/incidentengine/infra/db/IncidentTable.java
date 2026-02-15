@@ -5,6 +5,7 @@ public final class IncidentTable {
     //id | error_type | source | status | open_time | close_time
     public static final String TABLE = "incident";
 
+    public static final String COL_ID = "id";
     public static final String COL_ERROR_TYPE = "error_type";
     public static final String COL_SOURCE = "source";
     public static final String COL_STATUS = "status";

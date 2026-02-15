@@ -1,4 +1,4 @@
-package org.rancidcode.incidentengine.entity;
+package org.rancidcode.incidentengine.dto;
 
 import java.time.Instant;
 

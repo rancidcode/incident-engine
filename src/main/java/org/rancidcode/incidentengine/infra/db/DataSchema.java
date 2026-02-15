@@ -1,12 +1,16 @@
 package org.rancidcode.incidentengine.infra.db;
 
-import org.rancidcode.incidentengine.entity.Incident;
-import org.rancidcode.incidentengine.entity.Telemetry;
+import org.rancidcode.incidentengine.dto.Incident;
+import org.rancidcode.incidentengine.dto.MqttStatus;
+import org.rancidcode.incidentengine.dto.Telemetry;
 import org.springframework.jdbc.core.RowMapper;
+import tools.jackson.databind.ObjectMapper;
 
-public final class DataSchema
-{
-    private DataSchema(){}
+public final class DataSchema {
+    public static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private DataSchema() {
+    }
 
     public static final RowMapper<Telemetry> telemetryRowMapper = (rs, i) -> new Telemetry(
             rs.getString(TelemetryTable.COL_DEVICE_ID),
@@ -23,4 +27,12 @@ public final class DataSchema
             rs.getTimestamp(IncidentTable.COL_OPEN_TIME).toInstant(),
             rs.getTimestamp(IncidentTable.COL_CLOSE_TIME).toInstant()
     );
+
+    public static final RowMapper<MqttStatus> mqttStatusRowMapper = (rs, i) -> new MqttStatus(
+            rs.getString(MqttStatusTable.COL_EVENT_TYPE),
+            rs.getString(MqttStatusTable.COL_STATUS),
+            rs.getString(MqttStatusTable.COL_SOURCE),
+            rs.getTimestamp(MqttStatusTable.COL_EVENT_TIME).toInstant()
+    );
+
 }
