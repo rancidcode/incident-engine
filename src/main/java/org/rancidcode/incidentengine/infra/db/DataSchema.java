@@ -1,5 +1,6 @@
 package org.rancidcode.incidentengine.infra.db;
 
+import org.rancidcode.incidentengine.dto.Dlq;
 import org.rancidcode.incidentengine.dto.Incident;
 import org.rancidcode.incidentengine.dto.MqttStatus;
 import org.rancidcode.incidentengine.dto.Telemetry;
@@ -35,4 +36,11 @@ public final class DataSchema {
             rs.getTimestamp(MqttStatusTable.COL_EVENT_TIME).toInstant()
     );
 
+    public static final RowMapper<Dlq> dlqRowMapper = (rs, i) -> new Dlq(
+            rs.getString(DlqTable.COL_DLQ_TYPE),
+            rs.getString(DlqTable.COL_SOURCE),
+            rs.getTimestamp(DlqTable.COL_EVENT_TIME).toInstant(),
+            rs.getString(DlqTable.COL_RAW_MESSAGE),
+            rs.getString(DlqTable.COL_ERROR_MESSAGE)
+    );
 }

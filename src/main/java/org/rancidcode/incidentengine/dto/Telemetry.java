@@ -1,8 +1,10 @@
 package org.rancidcode.incidentengine.dto;
 
+import org.rancidcode.incidentengine.common.HasTimestamp;
+
 import java.time.Instant;
 
-public class Telemetry {
+public class Telemetry implements HasTimestamp {
 
     private final String deviceId;
     private final double temperature;
@@ -34,6 +36,7 @@ public class Telemetry {
         return humidity;
     }
 
+    @Override
     public Instant getTimestamp() {
         return timestamp;
     }
